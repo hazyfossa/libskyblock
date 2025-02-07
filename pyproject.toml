@@ -1,7 +1,7 @@
 [project]
 name = "libskyblock"
 version = "0.1.0"
-description = "Add your description here"
+description = "A fully typed pythonic wrapper for the Hypixel Skyblock API."
 readme = "README.md"
 authors = [{ name = "hazyfossa", email = "hazyfossa@gmail.com" }]
 requires-python = ">=3.12"
