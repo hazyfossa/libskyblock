@@ -1,6 +1,8 @@
 from httpx import Client
 from msgspec import Struct, json
 
+from libskyblock.util.construct import ModuleBase
+
 
 class SkyblockApiError(Exception):
     def __init__(self, code: int, reason: str) -> None:
@@ -39,3 +41,6 @@ class Api:
             raise SkyblockApiError(response.status_code, err.cause)
 
         return json.decode(response.read(), type=model)
+
+
+UseApi = ModuleBase[Api]

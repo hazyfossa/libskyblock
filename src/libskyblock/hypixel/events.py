@@ -1,6 +1,8 @@
 from enum import Enum
-from libskyblock.api import Api, BaseResponseModel
+
 from msgspec import Struct
+
+from .api import BaseResponseModel, UseApi
 
 
 class Firesale(Struct):
@@ -37,10 +39,7 @@ class Bingo(BaseResponseModel):
     goals: list[BingoGoal]
 
 
-class Events:
-    def __init__(self, api: Api) -> None:
-        self.client = api
-
+class Events(UseApi):
     def fire_sales(self) -> list[Firesale]:
         return self.client.query("/firesales", model=list[Firesale])
 

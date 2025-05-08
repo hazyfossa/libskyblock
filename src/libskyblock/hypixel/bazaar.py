@@ -1,10 +1,11 @@
-from msgspec import Struct
 from time import time
 from typing import Literal
 
-from libskyblock.api import CachedResponseModel
+from msgspec import Struct
+
 from libskyblock.types import ItemTag
-from libskyblock.util.lazy_init import Module
+
+from .api import CachedResponseModel, UseApi
 
 
 class QuickStatus(Struct):
@@ -38,7 +39,7 @@ class BazaarResponse(CachedResponseModel):
     products: dict[str, BazaarItem]
 
 
-class Bazaar(Module):
+class Bazaar(UseApi):
     def on_load(self):
         self.refresh()
 

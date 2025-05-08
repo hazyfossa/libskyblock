@@ -1,7 +1,7 @@
 from typing import Literal
 from msgspec import field, Struct
 from libskyblock.types import ProfileID, PlayerID
-from libskyblock.util.lazy_init import Module
+from .api import UseApi
 
 
 class Member(Struct):
@@ -43,7 +43,7 @@ class MultiProfile(Profile):
     selected: bool
 
 
-class Profiles(Module):
+class Profiles(UseApi):
     def query_id[T](self, id: ProfileID, view: type[T] = Profile) -> T:
         return self.client.query(f"/profile", params={"uuid": id}, model=view)
     
