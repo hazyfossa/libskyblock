@@ -1,16 +1,18 @@
 from typing import Literal
 
-SkyblockTag = str  # TODO
+#! Incomplete, possibly merge with data stuff, currently items are passed by tag (str)
+
+Tag = str  # TODO
 
 
-def tagify(item: str) -> SkyblockTag:
+def tagify(item: str) -> Tag:
     return item.replace(" ", "_").upper()
 
 
 class Item:
     def __init__(self, name: str, tag_override=None) -> None:
         self.name = name
-        self.tag: SkyblockTag = tag_override or tagify(name)
+        self.tag: Tag = tag_override or tagify(name)
 
     def __str__(self) -> str:
         return self.name
