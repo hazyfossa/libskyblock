@@ -12,7 +12,7 @@ class Member(Struct):
 class Transaction(Struct):
     timestamp: int # TODO: datetime
     amount: int
-    action: Literal["DEPOSIT", "WITHDRAW"] # TODO:verify withdraw
+    action: Literal["DEPOSIT", "WITHDRAW"] # TODO: verify withdraw
     initiator_name: str # TODO: PlayerID?
 
 
@@ -44,8 +44,8 @@ class MultiProfile(Profile):
 
 
 class Profiles(Module):
-    def query_id(self, id: ProfileID) -> Profile:
-        return self.client.query(f"/profile", params={"uuid": id}, model=Profile)
+    def query_id[T](self, id: ProfileID, view: type[T] = Profile) -> T:
+        return self.client.query(f"/profile", params={"uuid": id}, model=view)
     
-    def query_player(self, player_id: PlayerID) -> list[MultiProfile]:
-        return self.client.query(f"/profiles", params={"uuid": player_id}, model=list[MultiProfile])
+    def query_player[T](self, player_id: PlayerID, view: type[T] = MultiProfile) -> list[T]:
+        return self.client.query(f"/profiles", params={"uuid": player_id}, model=list[view])
