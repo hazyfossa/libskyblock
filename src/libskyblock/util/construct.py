@@ -1,4 +1,4 @@
-from typing import Callable, Protocol
+from typing import Any, Callable, Protocol, cast
 
 
 class Provides[T](Protocol):
@@ -14,13 +14,16 @@ class ModuleBase[T]:
 # This is a python descriptor
 # that performs api dependency injection
 # and transparently overwrites itself with a real instance on first access
-class Module[Api]:
+class Module[T: ModuleBase, Api = Any]:  # To constrain T by Api we need HKT's
     __slots__ = "prototype"
 
-    def __init__(self, prototype: type[ModuleBase[Api]]) -> None:
-        self.prototype = prototype
+    def __init__(
+        self,
+        prototype: type[T],
+    ) -> None:
+        self.prototype = cast(type[T], prototype)
 
-    def __get__(self, api_accessor: Provides[Api], owner=None) -> ModuleBase[Api]:
+    def __get__(self, api_accessor: Provides[Api], owner=None):
         if api_accessor is None:
             # If accessed via the class, return the descriptor as is, unbound
             return self
@@ -31,7 +34,7 @@ class Module[Api]:
 
         return instance
 
-    def inject(self, api: Api) -> ModuleBase[Api]:
+    def inject(self, api: Api):
         instance = self.prototype(api)
 
         if instance.on_load is not None:
