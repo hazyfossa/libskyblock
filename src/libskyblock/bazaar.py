@@ -4,6 +4,7 @@ from typing import Literal
 
 from libskyblock.api import Api, BaseResponseModel
 from libskyblock.item import Tag
+from libskyblock.util.lazy_init import Module
 
 
 class QuickStatus(Struct):
@@ -37,9 +38,8 @@ class BazaarResponse(BaseResponseModel):
     products: dict[str, BazaarItem]
 
 
-class Bazaar:
-    def __init__(self, api: Api) -> None:
-        self.client = api
+class Bazaar(Module):
+    def on_load(self):
         self.refresh()
 
     def refresh(self):
