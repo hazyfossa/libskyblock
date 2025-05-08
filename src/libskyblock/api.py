@@ -13,7 +13,10 @@ class SkyblockApiErrorModel(Struct):
 
 
 class BaseResponseModel(Struct):
-    success: bool
+    success: bool  # TODO: is this necessary for us?
+
+
+class CachedResponseModel(BaseResponseModel):
     lastUpdated: int
 
 
@@ -23,8 +26,13 @@ class Api:
             base_url="https://api.hypixel.net/v2/skyblock/", params={"key": key}
         )
 
-    def query[T](self, path: str, model: type[T] = dict) -> T:
-        response = self._http.get(path)
+    def query[T](
+        self,
+        path: str,
+        params: dict[str, str] | None = None,
+        model: type[T] = dict,
+    ) -> T:
+        response = self._http.get(path, params=params)
 
         if response.status_code != 200:
             err = json.decode(response.read(), type=SkyblockApiErrorModel)

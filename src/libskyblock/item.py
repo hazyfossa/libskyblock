@@ -1,18 +1,29 @@
+from enum import StrEnum
 from typing import Literal
 
-#! Incomplete, possibly merge with data stuff, currently items are passed by tag (str)
-
-Tag = str  # TODO
+from libskyblock.types import ItemTag
 
 
-def tagify(item: str) -> Tag:
+class tier(StrEnum):
+    common = "COMMON"
+    uncommon = "UNCOMMON"
+    rare = "RARE"
+    epic = "EPIC"
+    legendary = "LEGENDARY"
+    mythic = "MYTHIC"
+    divine = "SUPREME"  # TODO: verify
+    special = "SPECIAL"
+    very_special = "VERY_SPECIAL"
+
+
+def tagify(item: str) -> ItemTag:
     return item.replace(" ", "_").upper()
 
 
 class Item:
     def __init__(self, name: str, tag_override=None) -> None:
         self.name = name
-        self.tag: Tag = tag_override or tagify(name)
+        self.tag: ItemTag = tag_override or tagify(name)
 
     def __str__(self) -> str:
         return self.name

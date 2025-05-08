@@ -13,6 +13,8 @@ class Module:
 
 
 class Lazy[T: Module]:
+    __slots__ = ("prototype", "loaded")
+
     def __init__(self, prototype: type[T]) -> None:
         self.prototype = prototype
         self.loaded: T | None = None
@@ -25,6 +27,7 @@ class Lazy[T: Module]:
 
     def load(self, api: Api) -> T:
         instance = self.prototype(api)
+        del self.prototype
 
         if instance.on_load is not None:
             instance.on_load()

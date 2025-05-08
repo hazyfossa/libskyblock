@@ -25,10 +25,15 @@ MAP = {
     "o": "\033[3m",
     "r": "\033[0m",
 }  # Mapping format chars with ASCII values
+# TODO: rich mappings
+
+pattern = re.compile(f"{re.escape(CHAR)}([{ ''.join(MAP.keys()) }])")
 
 
-def clean(text: str) -> str:
-    pattern = re.compile(f"{re.escape(CHAR)}([{ ''.join(MAP.keys()) }])")
-    cleaned = pattern.sub("", text)
-    cleaned = cleaned.lstrip("[Lvl {LVL}] ")
-    return cleaned
+def mc_formatting(text: str, disable: bool = False) -> str:
+    sub = "" if disable else lambda m: MAP[m.group(1)]
+    return pattern.sub(sub, text)
+
+
+def no_pet_prefix(text: str) -> str:
+    return text.lstrip("[Lvl {LVL}] ")

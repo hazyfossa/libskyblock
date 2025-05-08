@@ -2,8 +2,8 @@ from msgspec import Struct
 from time import time
 from typing import Literal
 
-from libskyblock.api import Api, BaseResponseModel
-from libskyblock.item import Tag
+from libskyblock.api import CachedResponseModel
+from libskyblock.types import ItemTag
 from libskyblock.util.lazy_init import Module
 
 
@@ -34,7 +34,7 @@ class BazaarItem(Struct):
     quick_status: QuickStatus
 
 
-class BazaarResponse(BaseResponseModel):
+class BazaarResponse(CachedResponseModel):
     products: dict[str, BazaarItem]
 
 
@@ -46,12 +46,12 @@ class Bazaar(Module):
         self.state = self.client.query("/bazaar", model=BazaarResponse)
         self.local_update_timestamp = time()
 
-    def available(self, item: Tag) -> bool:
+    def available(self, item: ItemTag) -> bool:
         return item in self.state.products
 
     def get_price(
         self,
-        item: Tag,
+        item: ItemTag,
         type: Literal["buy", "sell"],
         order: bool = False,
         optimistic: bool = False,
