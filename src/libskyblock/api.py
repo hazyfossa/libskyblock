@@ -1,4 +1,3 @@
-from typing import Any, Literal, overload
 from httpx import Client
 from msgspec import Struct, json
 
@@ -26,10 +25,9 @@ class Api:
 
     def query[T](self, path: str, model: type[T] = dict) -> T:
         response = self._http.get(path)
-        print(response.request.url)
 
         if response.status_code != 200:
             err = json.decode(response.read(), type=SkyblockApiErrorModel)
             raise SkyblockApiError(response.status_code, err.cause)
 
-        return json.decode(response.read(), type=model or dict)
+        return json.decode(response.read(), type=model)

@@ -1,10 +1,13 @@
+from pathlib import Path
 from .api import Api
-from .bazaar import Bazaar, OptimisticBazaar
+from .bazaar import Bazaar
+from .data.store import DataStore
+from .util.lazy_init import Lazy
 
 
 class Skyblock:
-    def __init__(self, key: str = "-") -> None:
-        api = Api(key)
+    bazaar = Lazy(Bazaar)
 
-        self.raw_api = api
-        self.bazaar = OptimisticBazaar(api)
+    def __init__(self, data_path: str | Path, key: str = "-") -> None:
+        self.data = DataStore(Path(data_path))
+        self.api = Api(key)
